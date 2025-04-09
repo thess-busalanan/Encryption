@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RoboCrypt</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: #0f0f0f;
+      color: #00ffcc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #00ffe7;
+      text-shadow: 0 0 10px #00ffe7;
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      background: #111;
+      border: 2px solid #00ffcc;
+      box-shadow: 0 0 20px #00ffcc33;
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    textarea, input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      background: #222;
+      color: #00ffcc;
+      border: 1px solid #00ffcc55;
+      border-radius: 5px;
+      font-family: 'Orbitron', sans-serif;
+      resize: none;
+    }
+
+    button {
+      width: 48%;
+      padding: 10px;
+      margin: 5px 1%;
+      background: #00ffcc;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #00e6b8;
+    }
+
+    .output {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      background: #1a1a1a;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #00ffcc55;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+  </style>
+</head>
+<body>
+  <h1>🤖 RoboCrypt</h1>
+  <div class="container">
+    <textarea id="inputText" rows="4" placeholder="Enter your message here..."></textarea>
+    <input type="number" id="shift" placeholder="Enter shift (e.g., 3)" />
+    <div>
+      <button onclick="encrypt()">Encrypt</button>
+      <button onclick="decrypt()">Decrypt</button>
+    </div>
+    <div class="output" id="outputText">🔐 Output will appear here...</div>
+  </div>
+
+  <script>
+    function caesarCipher(str, shift) {
+      return str.split('').map(char => {
+        const isUpper = char >= 'A' && char <= 'Z';
+        const isLower = char >= 'a' && char <= 'z';
+
+        if (isUpper || isLower) {
+          const base = isUpper ? 65 : 97;
+          return String.fromCharCode((char.charCodeAt(0) - base + shift + 26) % 26 + base);
+        }
+        return char;
+      }).join('');
+    }
+
+    function encrypt() {
+      const text = document.getElementById("inputText").value;
+      const shift = parseInt(document.getElementById("shift").value);
+      if (isNaN(shift)) {
+        alert("Please enter a valid shift number.");
+        return;
+      }
+      const encrypted = caesarCipher(text, shift);
+      document.getElementById("outputText").innerText = "🔐 Encrypted:\n" + encrypted;
+    }
+
+    function decrypt() {
+      const text = document.getElementById("inputText").value;
+      const shift = parseInt(document.getElementById("shift").value);
+      if (isNaN(shift)) {
+        alert("Please enter a valid shift number.");
+        return;
+      }
+      const decrypted = caesarCipher(text, -shift);
+      document.getElementById("outputText").innerText = "🔓 Decrypted:\n" + decrypted;
+    }
+  </script>
+</body>
+</html>
